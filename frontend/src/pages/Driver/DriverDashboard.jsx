@@ -101,7 +101,7 @@ export default function DriverDashboard() {
 
   if (loading) {
     return (
-      <div className="dashboard-container">
+      <div className="page-container">
         <div className="loading">Loading dashboard...</div>
       </div>
     );
@@ -109,88 +109,111 @@ export default function DriverDashboard() {
 
   if (error) {
     return (
-      <div className="dashboard-container">
-        <div className="error">{error}</div>
+      <div className="page-container">
+        <div className="message message-error">{error}</div>
       </div>
     );
   }
 
   return (
-    <div className="dashboard-container">
-      <header className="dashboard-header">
+    <div className="page-container">
+      <header className="header">
         <h1>Driver Dashboard</h1>
         <div className="header-actions">
-          <div className="availability-toggle">
-            <label className="toggle-switch">
+          <div className="flex items-center gap-md">
+            <label style={{ 
+              position: 'relative', 
+              display: 'inline-block', 
+              width: '60px', 
+              height: '30px' 
+            }}>
               <input 
                 type="checkbox" 
                 checked={isOnline} 
                 onChange={toggleAvailability}
+                style={{ opacity: 0, width: 0, height: 0 }}
               />
-              <span className="slider"></span>
+              <span style={{
+                position: 'absolute',
+                cursor: 'pointer',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: isOnline ? 'var(--success)' : 'var(--bg-tertiary)',
+                transition: 'var(--transition-normal)',
+                borderRadius: '30px',
+                ':before': {
+                  position: 'absolute',
+                  content: '',
+                  height: '22px',
+                  width: '22px',
+                  left: isOnline ? '32px' : '4px',
+                  bottom: '4px',
+                  backgroundColor: 'white',
+                  transition: 'var(--transition-normal)',
+                  borderRadius: '50%'
+                }
+              }}></span>
             </label>
-            <span className={`status-text ${isOnline ? 'online' : 'offline'}`}>
+            <span className={`text-${isOnline ? 'success' : 'muted'}`} style={{ fontWeight: '600' }}>
               {isOnline ? 'Online' : 'Offline'}
             </span>
           </div>
-          <button onClick={handleLogout} className="logout-btn">Logout</button>
+          <button onClick={handleLogout} className="btn btn-danger">Logout</button>
         </div>
       </header>
 
-      <div className="dashboard-content">
-        <div className="driver-info-card">
-          <h2>Welcome, {driver?.name}!</h2>
-          <p>You are currently {isOnline ? 'online and available for rides' : 'offline'}.</p>
+      <div className="page-content">
+        <div className="card">
+          <h2 className="heading-lg">Welcome, {driver?.name}!</h2>
+          <p className="text-secondary">You are currently {isOnline ? 'online and available for rides' : 'offline'}.</p>
         </div>
 
         {currentRide ? (
-          <div className="current-ride-section">
-            <h2>Current Ride</h2>
+          <div className="card">
+            <h2 className="heading-lg">Current Ride</h2>
             <div className="ride-card">
-              <div className="ride-details">
-                <p><strong>Ride ID:</strong> {currentRide.rideId}</p>
-                <p><strong>Status:</strong> {currentRide.status}</p>
-                <p><strong>From:</strong> {currentRide.pickupLocation}</p>
-                <p><strong>To:</strong> {currentRide.dropoffLocation}</p>
-                <p><strong>Fare:</strong> ₹{currentRide.fare}</p>
-                {currentRide.user && (
-                  <div className="user-info">
-                    <p><strong>User:</strong> {currentRide.user.name}</p>
-                    <p><strong>Phone:</strong> {currentRide.user.phone}</p>
-                  </div>
-                )}
-              </div>
-              <div className="ride-actions">
-                <button 
-                  onClick={() => navigate('/driver/current-ride')} 
-                  className="manage-ride-btn"
-                >
-                  Manage Ride
-                </button>
-              </div>
+              <p><strong>Ride ID:</strong> {currentRide.rideId}</p>
+              <p><strong>Status:</strong> <span className={`status-badge status-${currentRide.status.toLowerCase()}`}>{currentRide.status}</span></p>
+              <p><strong>From:</strong> {currentRide.pickupLocation}</p>
+              <p><strong>To:</strong> {currentRide.dropoffLocation}</p>
+              <p><strong>Fare:</strong> ₹{currentRide.fare}</p>
+              {currentRide.user && (
+                <div className="mt-md">
+                  <p><strong>User:</strong> {currentRide.user.name}</p>
+                  <p><strong>Phone:</strong> {currentRide.user.phone}</p>
+                </div>
+              )}
+              <button 
+                onClick={() => navigate('/driver/current-ride')} 
+                className="btn btn-primary btn-full mt-md"
+              >
+                Manage Ride
+              </button>
             </div>
           </div>
         ) : isOnline ? (
-          <div className="available-rides-section">
-            <h2>Available Ride Requests</h2>
+          <div className="card">
+            <h2 className="heading-lg">Available Ride Requests</h2>
             {availableRides.length === 0 ? (
-              <div className="no-rides">
-                <p>No ride requests available at the moment.</p>
-                <p>Stay online to receive new requests!</p>
+              <div className="text-center">
+                <p className="text-secondary">No ride requests available at the moment.</p>
+                <p className="text-muted">Stay online to receive new requests!</p>
               </div>
             ) : (
-              <div className="rides-list">
+              <div style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
                 {availableRides.map((ride) => (
-                  <div key={ride.rideId} className="ride-request-card">
-                    <div className="ride-info">
+                  <div key={ride.rideId} className="ride-card">
+                    <div className="mb-md">
                       <p><strong>From:</strong> {ride.pickupLocation}</p>
                       <p><strong>To:</strong> {ride.dropoffLocation}</p>
                       <p><strong>Distance:</strong> {ride.distance} km</p>
-                      <p><strong>Fare:</strong> ₹{ride.fare}</p>
+                      <p><strong>Fare:</strong> <span className="text-accent">₹{ride.fare}</span></p>
                     </div>
                     <button 
                       onClick={() => acceptRide(ride.rideId)}
-                      className="accept-ride-btn"
+                      className="btn btn-success btn-full"
                     >
                       Accept Ride
                     </button>
@@ -200,283 +223,30 @@ export default function DriverDashboard() {
             )}
           </div>
         ) : (
-          <div className="offline-message">
-            <h2>You're Offline</h2>
-            <p>Turn on availability to start receiving ride requests.</p>
+          <div className="card text-center">
+            <h2 className="heading-lg">You're Offline</h2>
+            <p className="text-secondary">Turn on availability to start receiving ride requests.</p>
           </div>
         )}
 
-        <div className="dashboard-actions">
-          <div className="action-grid">
+        <div className="card">
+          <h3 className="heading-md">Quick Actions</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-md)' }}>
             <button 
               onClick={() => navigate('/driver/profile')} 
-              className="action-btn"
+              className="btn btn-secondary btn-lg"
             >
               👤 My Profile
             </button>
             <button 
               onClick={() => navigate('/driver/history')} 
-              className="action-btn"
+              className="btn btn-secondary btn-lg"
             >
               📋 Ride History
             </button>
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        .dashboard-container {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 20px;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-
-        .dashboard-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 30px;
-          padding: 20px 0;
-          border-bottom: 2px solid #f0f0f0;
-        }
-
-        .header-actions {
-          display: flex;
-          align-items: center;
-          gap: 20px;
-        }
-
-        .availability-toggle {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
-
-        .toggle-switch {
-          position: relative;
-          display: inline-block;
-          width: 60px;
-          height: 34px;
-        }
-
-        .toggle-switch input {
-          opacity: 0;
-          width: 0;
-          height: 0;
-        }
-
-        .slider {
-          position: absolute;
-          cursor: pointer;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: #ccc;
-          transition: .4s;
-          border-radius: 34px;
-        }
-
-        .slider:before {
-          position: absolute;
-          content: "";
-          height: 26px;
-          width: 26px;
-          left: 4px;
-          bottom: 4px;
-          background-color: white;
-          transition: .4s;
-          border-radius: 50%;
-        }
-
-        input:checked + .slider {
-          background-color: #28a745;
-        }
-
-        input:checked + .slider:before {
-          transform: translateX(26px);
-        }
-
-        .status-text {
-          font-weight: 600;
-          font-size: 16px;
-        }
-
-        .status-text.online {
-          color: #28a745;
-        }
-
-        .status-text.offline {
-          color: #6c757d;
-        }
-
-        .logout-btn {
-          background: #e74c3c;
-          color: white;
-          border: none;
-          padding: 10px 20px;
-          border-radius: 5px;
-          cursor: pointer;
-          font-weight: 500;
-        }
-
-        .driver-info-card {
-          background: white;
-          border-radius: 15px;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          padding: 25px;
-          margin-bottom: 30px;
-        }
-
-        .driver-stats {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-          gap: 20px;
-          margin-top: 20px;
-        }
-
-        .stat-item {
-          text-align: center;
-          padding: 20px;
-          background: #f8f9fa;
-          border-radius: 10px;
-        }
-
-        .stat-value {
-          display: block;
-          font-size: 24px;
-          font-weight: bold;
-          color: #3498db;
-          margin-bottom: 5px;
-        }
-
-        .stat-label {
-          color: #666;
-          font-size: 14px;
-        }
-
-        .current-ride-section, .available-rides-section, .offline-message {
-          background: white;
-          border-radius: 15px;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          padding: 25px;
-          margin-bottom: 30px;
-        }
-
-        .ride-card, .ride-request-card {
-          background: #f8f9fa;
-          border-radius: 10px;
-          padding: 20px;
-          margin-bottom: 15px;
-          border-left: 4px solid #3498db;
-        }
-
-        .ride-details p {
-          margin: 8px 0;
-        }
-
-        .user-info {
-          background: white;
-          padding: 15px;
-          border-radius: 8px;
-          margin-top: 15px;
-        }
-
-        .manage-ride-btn, .accept-ride-btn {
-          background: #28a745;
-          color: white;
-          border: none;
-          padding: 12px 24px;
-          border-radius: 6px;
-          cursor: pointer;
-          font-weight: 500;
-          margin-top: 15px;
-        }
-
-        .no-rides {
-          text-align: center;
-          padding: 40px;
-          color: #666;
-        }
-
-        .rides-list {
-          max-height: 400px;
-          overflow-y: auto;
-        }
-
-        .ride-request-card {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-
-        .offline-message {
-          text-align: center;
-          color: #666;
-        }
-
-        .dashboard-actions {
-          background: white;
-          border-radius: 15px;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          padding: 25px;
-        }
-
-        .action-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 15px;
-        }
-
-        .action-btn {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          border: none;
-          padding: 20px;
-          border-radius: 10px;
-          cursor: pointer;
-          font-size: 16px;
-          font-weight: 500;
-          transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .action-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .loading, .error {
-          text-align: center;
-          padding: 40px;
-          font-size: 18px;
-        }
-
-        .error {
-          color: #e74c3c;
-        }
-
-        @media (max-width: 768px) {
-          .dashboard-container {
-            padding: 10px;
-          }
-          
-          .dashboard-header {
-            flex-direction: column;
-            gap: 15px;
-            text-align: center;
-          }
-          
-          .header-actions {
-            flex-direction: column;
-          }
-          
-          .ride-request-card {
-            flex-direction: column;
-            gap: 15px;
-          }
-        }
-      `}</style>
     </div>
   );
 }

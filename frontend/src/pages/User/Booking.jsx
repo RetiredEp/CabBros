@@ -6,7 +6,6 @@ import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import axios from 'axios';
 import { rideService } from '../../services/rideService';
-import './Booking.css';
 
 // Component to handle map bounds
 const MapBounds = ({ pickupCoords, dropoffCoords }) => {
@@ -304,139 +303,176 @@ const Booking = () => {
   };
 
   return (
-    <div className="app-container">
-      <div className="content-wrapper">
-        <header className="app-header">
-          <h1 className="app-title">Book a Ride</h1>
-          <button onClick={handleBack} className="btn btn-secondary">
-            ← Dashboard
-          </button>
-        </header>
+    <div className="page-container">
+      <div className="header">
+        <h2>Book a Ride</h2>
+        <button onClick={handleBack} className="btn btn-secondary">
+          ← Dashboard
+        </button>
+      </div>
 
-        <div className="app-card">
-          {!rideBooked ? (
-            <>
-              <div className="input-group">
-                <label>Pickup Location</label>
-                <div className="input-with-button">
-                  <input
-                    type="text"
-                    placeholder="Enter pickup address"
-                    value={pickup}
-                    onChange={(e) => handlePickupChange(e.target.value)}
-                    onFocus={() => setShowPickupSuggestions(true)}
-                    onBlur={() => setTimeout(() => setShowPickupSuggestions(false), 200)}
-                    className="app-input"
-                  />
-                  <button 
-                    onClick={() => fetchCoords(pickup, setPickupCoords)}
-                    className="btn btn-secondary"
-                    disabled={!pickup}
-                  >
-                    Set Pickup
-                  </button>
-                </div>
-                {showPickupSuggestions && pickupSuggestions.length > 0 && (
-                  <div className="suggestions-list">
-                    {pickupSuggestions.map((suggestion, index) => (
-                      <div 
-                        key={index} 
-                        className="suggestion-item"
-                        onClick={() => selectPickupSuggestion(suggestion)}
-                      >
-                        {suggestion.display_name}
-                      </div>
-                    ))}
-                  </div>
-                )}
+      <div className="card">
+        {!rideBooked ? (
+          <>
+            <div className="form-group">
+              <label>Pickup Location</label>
+              <div className="flex gap-sm">
+                <input
+                  type="text"
+                  placeholder="Enter pickup address"
+                  value={pickup}
+                  onChange={(e) => handlePickupChange(e.target.value)}
+                  onFocus={() => setShowPickupSuggestions(true)}
+                  onBlur={() => setTimeout(() => setShowPickupSuggestions(false), 200)}
+                  style={{ flex: 1 }}
+                />
+                <button 
+                  onClick={() => fetchCoords(pickup, setPickupCoords)}
+                  className="btn btn-secondary btn-sm"
+                  disabled={!pickup}
+                >
+                  Set Pickup
+                </button>
               </div>
-
-              <div className="input-group">
-                <label>Dropoff Location</label>
-                <div className="input-with-button">
-                  <input
-                    type="text"
-                    placeholder="Enter dropoff address"
-                    value={dropoff}
-                    onChange={(e) => handleDropoffChange(e.target.value)}
-                    onFocus={() => setShowDropoffSuggestions(true)}
-                    onBlur={() => setTimeout(() => setShowDropoffSuggestions(false), 200)}
-                    className="app-input"
-                  />
-                  <button 
-                    onClick={() => fetchCoords(dropoff, setDropoffCoords)}
-                    className="btn btn-secondary"
-                    disabled={!dropoff}
-                  >
-                    Set Dropoff
-                  </button>
-                </div>
-                {showDropoffSuggestions && dropoffSuggestions.length > 0 && (
-                  <div className="suggestions-list">
-                    {dropoffSuggestions.map((suggestion, index) => (
-                      <div 
-                        key={index} 
-                        className="suggestion-item"
-                        onClick={() => selectDropoffSuggestion(suggestion)}
-                      >
-                        {suggestion.display_name}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <button 
-                onClick={calculateDistance}
-                className="btn btn-secondary"
-                disabled={!pickupCoords || !dropoffCoords}
-              >
-                Calculate Distance & Fare
-              </button>
-
-              {distance && (
-                <div className="ride-details">
-                  <div className="detail-item">
-                    <span>Distance:</span>
-                    <span>{distance} km</span>
-                  </div>
-                  <div className="detail-item">
-                    <span>Estimated Duration:</span>
-                    <span>{duration} mins</span>
-                  </div>
-                  <div className="detail-item">
-                    <span>Estimated Fare:</span>
-                    <span>₹{fare}</span>
-                  </div>
+              {showPickupSuggestions && pickupSuggestions.length > 0 && (
+                <div style={{ 
+                  background: 'var(--bg-secondary)', 
+                  border: '1px solid var(--bg-tertiary)', 
+                  borderRadius: 'var(--radius-md)', 
+                  marginTop: 'var(--spacing-xs)',
+                  maxHeight: '200px',
+                  overflowY: 'auto'
+                }}>
+                  {pickupSuggestions.map((suggestion, index) => (
+                    <div 
+                      key={index} 
+                      style={{
+                        padding: 'var(--spacing-sm) var(--spacing-md)',
+                        cursor: 'pointer',
+                        borderBottom: '1px solid var(--bg-tertiary)',
+                        transition: 'var(--transition-fast)'
+                      }}
+                      onClick={() => selectPickupSuggestion(suggestion)}
+                      onMouseEnter={(e) => e.target.style.background = 'var(--bg-tertiary)'}
+                      onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                    >
+                      {suggestion.display_name}
+                    </div>
+                  ))}
                 </div>
               )}
-
-              <button 
-                onClick={handleBook}
-                className="btn"
-                disabled={!distance || loading || searching}
-              >
-                {loading ? 'Booking...' : searching ? 'Searching Driver...' : 'Book Ride'}
-              </button>
-            </>
-          ) : null}
-
-          {searching && (
-            <div className="searching-indicator">
-              <div className="loading-spinner"></div>
-              <p>Searching for available drivers...</p>
-              <p className="search-details">Please wait while we find you a ride</p>
             </div>
-          )}
 
-          {status && (
-            <div className="status-message">
-              {status}
+            <div className="form-group">
+              <label>Dropoff Location</label>
+              <div className="flex gap-sm">
+                <input
+                  type="text"
+                  placeholder="Enter dropoff address"
+                  value={dropoff}
+                  onChange={(e) => handleDropoffChange(e.target.value)}
+                  onFocus={() => setShowDropoffSuggestions(true)}
+                  onBlur={() => setTimeout(() => setShowDropoffSuggestions(false), 200)}
+                  style={{ flex: 1 }}
+                />
+                <button 
+                  onClick={() => fetchCoords(dropoff, setDropoffCoords)}
+                  className="btn btn-secondary btn-sm"
+                  disabled={!dropoff}
+                >
+                  Set Dropoff
+                </button>
+              </div>
+              {showDropoffSuggestions && dropoffSuggestions.length > 0 && (
+                <div style={{ 
+                  background: 'var(--bg-secondary)', 
+                  border: '1px solid var(--bg-tertiary)', 
+                  borderRadius: 'var(--radius-md)', 
+                  marginTop: 'var(--spacing-xs)',
+                  maxHeight: '200px',
+                  overflowY: 'auto'
+                }}>
+                  {dropoffSuggestions.map((suggestion, index) => (
+                    <div 
+                      key={index} 
+                      style={{
+                        padding: 'var(--spacing-sm) var(--spacing-md)',
+                        cursor: 'pointer',
+                        borderBottom: '1px solid var(--bg-tertiary)',
+                        transition: 'var(--transition-fast)'
+                      }}
+                      onClick={() => selectDropoffSuggestion(suggestion)}
+                      onMouseEnter={(e) => e.target.style.background = 'var(--bg-tertiary)'}
+                      onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                    >
+                      {suggestion.display_name}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-        </div>
 
-        <div className="app-card">
+            <button 
+              onClick={calculateDistance}
+              className="btn btn-secondary btn-full"
+              disabled={!pickupCoords || !dropoffCoords}
+            >
+              Calculate Distance & Fare
+            </button>
+
+            {distance && (
+              <div className="card-sm">
+                <div className="flex justify-between mb-sm">
+                  <span>Distance:</span>
+                  <span className="text-accent">{distance} km</span>
+                </div>
+                <div className="flex justify-between mb-sm">
+                  <span>Estimated Duration:</span>
+                  <span className="text-accent">{duration} mins</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Estimated Fare:</span>
+                  <span className="text-accent font-weight: bold">₹{fare}</span>
+                </div>
+              </div>
+            )}
+
+            <button 
+              onClick={handleBook}
+              className="btn btn-primary btn-full btn-lg"
+              disabled={!distance || loading || searching}
+            >
+              {loading ? 'Booking...' : searching ? 'Searching Driver...' : 'Book Ride'}
+            </button>
+          </>
+        ) : null}
+
+        {searching && (
+          <div className="text-center">
+            <div style={{
+              width: '50px',
+              height: '50px',
+              border: '3px solid var(--bg-tertiary)',
+              borderTop: '3px solid var(--accent-primary)',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
+              margin: '0 auto var(--spacing-md)'
+            }}></div>
+            <h3 className="heading-sm">Searching for available drivers...</h3>
+            <p className="text-secondary">Please wait while we find you a ride</p>
+          </div>
+        )}
+
+        {status && (
+          <div className={`message ${status.includes('error') || status.includes('failed') || status.includes('No drivers') ? 'message-error' : 'message-info'}`}>
+            {status}
+          </div>
+        )}
+      </div>
+
+      <div className="card">
+        <h3 className="heading-md">Route Map</h3>
+        <div style={{ borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
           <MapContainer
             center={[17.385, 78.4867]}
             zoom={13}
@@ -452,6 +488,14 @@ const Booking = () => {
           </MapContainer>
         </div>
       </div>
+
+      {/* Add CSS for spinner animation */}
+      <style jsx>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 };
