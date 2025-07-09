@@ -123,7 +123,7 @@ export default function DriverCurrentRide() {
         </div>
 
         <div className="card-content">
-          {/* Status Card */}
+          {/* Status Section */}
           <div className="status-section">
             <div className="status-header">
               <div style={{ fontSize: '2rem' }}>{statusInfo.icon}</div>
@@ -137,99 +137,111 @@ export default function DriverCurrentRide() {
             </div>
           </div>
 
-          {/* Passenger Information */}
-          <div className="section">
-            <h3 className="section-title">Passenger Information</h3>
-            <div className="passenger-card">
-              <div className="passenger-avatar">
-                {ride.user?.name?.charAt(0).toUpperCase() || 'P'}
-              </div>
-              <div className="passenger-info">
-                <div className="passenger-name">{ride.user?.name || 'Unknown'}</div>
-                <div className="passenger-phone">{ride.user?.phone || 'No phone'}</div>
-              </div>
-              <div className="contact-actions">
-                <button className="btn btn-secondary btn-sm">📞 Call</button>
-                <button className="btn btn-secondary btn-sm">💬 Message</button>
-              </div>
-            </div>
-          </div>
-
-          {/* Route Information */}
-          <div className="section">
-            <h3 className="section-title">Route Details</h3>
-            <div className="route-container">
-              <div className="route-point">
-                <div className="route-icon">📍</div>
-                <div className="route-details">
-                  <div className="route-label">Pickup Location</div>
-                  <div className="route-address">{ride.pickupLocation || 'Location not available'}</div>
+          {/* Main Content Grid */}
+          <div className="main-grid">
+            {/* Left Column - Passenger & Route */}
+            <div className="left-column">
+              {/* Passenger Information */}
+              <div className="info-card">
+                <h3 className="card-title">Passenger</h3>
+                <div className="passenger-details">
+                  <div className="passenger-avatar">
+                    {ride.user?.name?.charAt(0).toUpperCase() || 'P'}
+                  </div>
+                  <div className="passenger-info">
+                    <div className="passenger-name">{ride.user?.name || 'Unknown'}</div>
+                    <div className="passenger-phone">{ride.user?.phone || 'No phone'}</div>
+                  </div>
+                  <div className="contact-actions">
+                    <button className="btn btn-secondary btn-sm">📞</button>
+                    <button className="btn btn-secondary btn-sm">💬</button>
+                  </div>
                 </div>
-                <button 
-                  className="btn btn-accent btn-sm" 
-                  onClick={() => openNavigation(ride.pickupLocation)}
-                >
-                  🧭 Navigate
-                </button>
               </div>
-              
-              <div className="route-line"></div>
-              
-              <div className="route-point">
-                <div className="route-icon">🏁</div>
-                <div className="route-details">
-                  <div className="route-label">Dropoff Location</div>
-                  <div className="route-address">{ride.dropoffLocation || 'Location not available'}</div>
+
+              {/* Route Information */}
+              <div className="info-card">
+                <h3 className="card-title">Route</h3>
+                <div className="route-container">
+                  <div className="route-point">
+                    <div className="route-icon">📍</div>
+                    <div className="route-details">
+                      <div className="route-label">Pickup</div>
+                      <div className="route-address">{ride.pickupLocation || 'Location not available'}</div>
+                    </div>
+                    <button 
+                      className="btn btn-accent btn-sm" 
+                      onClick={() => openNavigation(ride.pickupLocation)}
+                    >
+                      🧭
+                    </button>
+                  </div>
+                  
+                  <div className="route-line"></div>
+                  
+                  <div className="route-point">
+                    <div className="route-icon">🏁</div>
+                    <div className="route-details">
+                      <div className="route-label">Destination</div>
+                      <div className="route-address">{ride.dropoffLocation || 'Location not available'}</div>
+                    </div>
+                    <button 
+                      className="btn btn-accent btn-sm" 
+                      onClick={() => openNavigation(ride.dropoffLocation)}
+                    >
+                      🧭
+                    </button>
+                  </div>
                 </div>
-                <button 
-                  className="btn btn-accent btn-sm" 
-                  onClick={() => openNavigation(ride.dropoffLocation)}
-                >
-                  🧭 Navigate
-                </button>
               </div>
             </div>
-          </div>
 
-          {/* Trip Info */}
-          <div className="section">
-            <div className="trip-stats">
-              <div className="stat-item">
-                <div className="stat-label">Distance</div>
-                <div className="stat-value">{ride.distance || 0} km</div>
+            {/* Right Column - Trip Info & Actions */}
+            <div className="right-column">
+              {/* Trip Statistics */}
+              <div className="info-card">
+                <h3 className="card-title">Trip Details</h3>
+                <div className="trip-stats">
+                  <div className="stat-item">
+                    <div className="stat-icon">📏</div>
+                    <div className="stat-details">
+                      <div className="stat-label">Distance</div>
+                      <div className="stat-value">{ride.distance || 0} km</div>
+                    </div>
+                  </div>
+                  <div className="stat-item">
+                    <div className="stat-icon">💰</div>
+                    <div className="stat-details">
+                      <div className="stat-label">Fare</div>
+                      <div className="stat-value accent">₹{ride.fare || 0}</div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="stat-item">
-                <div className="stat-label">Fare</div>
-                <div className="stat-value accent">₹{ride.fare || 0}</div>
-              </div>
-              <div className="stat-item">
-                <div className="stat-label">Duration</div>
-                <div className="stat-value">{ride.estimatedTime || 'N/A'}</div>
-              </div>
+
+              {/* Action Card */}
+              {ride.status === 'ACCEPTED' && (
+                <div className="action-card">
+                  <div className="action-icon">🚀</div>
+                  <h4>Ready to start?</h4>
+                  <p className="action-description">Head to pickup location and start the trip when passenger is ready.</p>
+                  <button onClick={startRide} className="btn btn-primary btn-lg full-width">
+                    Start Trip
+                  </button>
+                </div>
+              )}
+              
+              {ride.status === 'IN_PROGRESS' && (
+                <div className="action-card in-progress">
+                  <div className="action-icon">🛣️</div>
+                  <h4>Trip in progress</h4>
+                  <p className="action-description">Drive safely to destination. Complete when you arrive.</p>
+                  <button onClick={completeRide} className="btn btn-success btn-lg full-width">
+                    Complete Trip
+                  </button>
+                </div>
+              )}
             </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="action-section">
-            {ride.status === 'ACCEPTED' && (
-              <div className="action-card">
-                <h4 className="text-center mb-md">Ready to start the trip?</h4>
-                <p className="text-secondary text-center mb-lg">Head to the pickup location and start the trip when the passenger is ready.</p>
-                <button onClick={startRide} className="btn btn-primary btn-lg full-width">
-                  🚀 Start Trip
-                </button>
-              </div>
-            )}
-            
-            {ride.status === 'IN_PROGRESS' && (
-              <div className="action-card">
-                <h4 className="text-center mb-md">Trip in progress</h4>
-                <p className="text-secondary text-center mb-lg">Drive safely to the destination. Complete the trip when you arrive.</p>
-                <button onClick={completeRide} className="btn btn-success btn-lg full-width">
-                  ✅ Complete Trip
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -262,38 +274,54 @@ export default function DriverCurrentRide() {
           text-transform: uppercase;
         }
 
-        .section {
-          margin-bottom: 2rem;
+        .main-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+          margin-top: 1rem;
         }
 
-        .section-title {
-          color: var(--text-primary);
-          margin-bottom: 1rem;
-          font-size: 1.25rem;
-          font-weight: 600;
-        }
-
-        .passenger-card {
+        .left-column,
+        .right-column {
           display: flex;
-          align-items: center;
-          gap: 1rem;
-          padding: 1.5rem;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+
+        .info-card {
           background: var(--surface-color);
           border-radius: var(--border-radius);
           border: 1px solid var(--border-color);
+          padding: 1.5rem;
+        }
+
+        .card-title {
+          color: var(--text-primary);
+          margin-bottom: 1rem;
+          font-size: 1.1rem;
+          font-weight: 600;
+          border-bottom: 1px solid var(--border-color);
+          padding-bottom: 0.5rem;
+        }
+
+        .passenger-details {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
         }
 
         .passenger-avatar {
-          width: 60px;
-          height: 60px;
+          width: 50px;
+          height: 50px;
           border-radius: 50%;
           background: var(--primary-color);
           color: white;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 1.5rem;
+          font-size: 1.25rem;
           font-weight: bold;
+          flex-shrink: 0;
         }
 
         .passenger-info {
@@ -317,22 +345,22 @@ export default function DriverCurrentRide() {
         }
 
         .route-container {
-          background: var(--surface-color);
-          border-radius: var(--border-radius);
-          border: 1px solid var(--border-color);
-          padding: 1.5rem;
+          display: flex;
+          flex-direction: column;
         }
 
         .route-point {
           display: flex;
           align-items: center;
           gap: 1rem;
+          padding: 0.5rem 0;
         }
 
         .route-icon {
-          font-size: 1.5rem;
-          width: 40px;
+          font-size: 1.25rem;
+          width: 30px;
           text-align: center;
+          flex-shrink: 0;
         }
 
         .route-details {
@@ -350,27 +378,40 @@ export default function DriverCurrentRide() {
         .route-address {
           color: var(--text-primary);
           font-weight: 500;
+          font-size: 0.9rem;
         }
 
         .route-line {
           width: 2px;
-          height: 30px;
+          height: 20px;
           background: var(--border-color);
-          margin: 1rem 0 1rem 20px;
+          margin: 0.5rem 0 0.5rem 15px;
         }
 
         .trip-stats {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+          display: flex;
+          flex-direction: column;
           gap: 1rem;
         }
 
         .stat-item {
-          text-align: center;
+          display: flex;
+          align-items: center;
+          gap: 1rem;
           padding: 1rem;
-          background: var(--surface-color);
+          background: var(--bg-primary);
           border-radius: var(--border-radius);
           border: 1px solid var(--border-color);
+        }
+
+        .stat-icon {
+          font-size: 1.5rem;
+          width: 40px;
+          text-align: center;
+        }
+
+        .stat-details {
+          flex: 1;
         }
 
         .stat-label {
@@ -378,7 +419,7 @@ export default function DriverCurrentRide() {
           font-size: 0.8rem;
           text-transform: uppercase;
           font-weight: 600;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.25rem;
         }
 
         .stat-value {
@@ -391,26 +432,53 @@ export default function DriverCurrentRide() {
           color: var(--accent-primary);
         }
 
-        .action-section {
-          margin-top: 2rem;
-        }
-
         .action-card {
-          padding: 2rem;
           background: var(--surface-color);
           border-radius: var(--border-radius);
           border: 1px solid var(--border-color);
+          padding: 2rem;
           text-align: center;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .action-card.in-progress {
+          background: linear-gradient(135deg, var(--surface-color) 0%, rgba(255, 152, 0, 0.1) 100%);
+          border-color: var(--warning);
+        }
+
+        .action-icon {
+          font-size: 2.5rem;
+          margin-bottom: 1rem;
+          display: block;
+        }
+
+        .action-card h4 {
+          color: var(--text-primary);
+          margin-bottom: 0.5rem;
+          font-size: 1.25rem;
+        }
+
+        .action-description {
+          color: var(--text-secondary);
+          margin-bottom: 1.5rem;
+          font-size: 0.9rem;
+          line-height: 1.4;
         }
 
         @media (max-width: 768px) {
+          .main-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+          }
+
           .status-header {
             flex-direction: column;
             text-align: center;
             gap: 1rem;
           }
 
-          .passenger-card {
+          .passenger-details {
             flex-direction: column;
             text-align: center;
           }
@@ -422,11 +490,16 @@ export default function DriverCurrentRide() {
           }
 
           .route-line {
-            margin: 1rem auto;
+            margin: 0.5rem auto;
           }
 
           .contact-actions {
             justify-content: center;
+          }
+
+          .stat-item {
+            justify-content: center;
+            text-align: center;
           }
         }
       `}</style>
