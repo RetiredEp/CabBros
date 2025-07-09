@@ -116,11 +116,11 @@ export default function DriverRideHistory() {
                     <div className="location-section">
                       <div className="location-item">
                         <span className="location-label">From:</span>
-                        <span className="location-value">{ride.source}</span>
+                        <span className="location-value">{ride.pickupLocation || 'N/A'}</span>
                       </div>
                       <div className="location-item">
                         <span className="location-label">To:</span>
-                        <span className="location-value">{ride.destination}</span>
+                        <span className="location-value">{ride.dropoffLocation || 'N/A'}</span>
                       </div>
                     </div>
                     
@@ -128,18 +128,22 @@ export default function DriverRideHistory() {
                       <div className="meta-item">
                         <span className="meta-label">Date:</span>
                         <span className="meta-value">
-                          {ride.rideDate ? new Date(ride.rideDate).toLocaleDateString() : 'N/A'}
+                          {ride.createdAt ? new Date(ride.createdAt).toLocaleDateString() : 
+                           ride.requestedAt ? new Date(ride.requestedAt).toLocaleDateString() : 
+                           ride.rideDate ? new Date(ride.rideDate).toLocaleDateString() : 'N/A'}
                         </span>
                       </div>
                       <div className="meta-item">
                         <span className="meta-label">Time:</span>
                         <span className="meta-value">
-                          {ride.rideTime || 'N/A'}
+                          {ride.createdAt ? new Date(ride.createdAt).toLocaleTimeString() : 
+                           ride.requestedAt ? new Date(ride.requestedAt).toLocaleTimeString() : 
+                           ride.rideTime || 'N/A'}
                         </span>
                       </div>
                       <div className="meta-item">
                         <span className="meta-label">Customer:</span>
-                        <span className="meta-value">{ride.userName || 'N/A'}</span>
+                        <span className="meta-value">{ride.user?.name || ride.userName || 'N/A'}</span>
                       </div>
                     </div>
                     

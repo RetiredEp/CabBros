@@ -201,7 +201,10 @@ function CurrentRide() {
             </div>
             <div className="text-center">
               <div className="text-secondary" style={{ fontSize: '0.8rem', fontWeight: '600' }}>REQUESTED AT</div>
-              <div className="text-primary" style={{ fontSize: '0.9rem' }}>{new Date(ride.requestedAt).toLocaleTimeString()}</div>
+              <div className="text-primary" style={{ fontSize: '0.9rem' }}>
+                {ride.requestedAt ? new Date(ride.requestedAt).toLocaleTimeString() : 
+                 ride.createdAt ? new Date(ride.createdAt).toLocaleTimeString() : 'N/A'}
+              </div>
             </div>
           </div>
         </div>
