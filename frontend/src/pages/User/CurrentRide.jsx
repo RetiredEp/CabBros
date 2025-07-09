@@ -10,6 +10,7 @@ function CurrentRide() {
   const [loading, setLoading] = useState(true);
   const [showPayment, setShowPayment] = useState(false);
   const [showRating, setShowRating] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('CARD');
   const [rating, setRating] = useState(5);
   const [review, setReview] = useState('');
   const [paymentLoading, setPaymentLoading] = useState(false);
@@ -45,7 +46,7 @@ function CurrentRide() {
       const paymentData = {
         rideId: ride.rideId,
         amount: ride.fare,
-        method: 'CARD' // or 'CASH', 'UPI'
+        method: selectedPaymentMethod
       };
       await paymentService.processPayment(paymentData);
       setShowPayment(false);
@@ -91,38 +92,41 @@ function CurrentRide() {
 
   if (loading) {
     return (
-      <div className="loading-container">
-        <div className="spinner"></div>
-        <p>Loading current ride details...</p>
+      <div className="page-container">
+        <div className="loading">Loading current ride details...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="error-container">
-        <h2>{error}</h2>
-        <p>You don't have any active rides at the moment.</p>
-        <button onClick={() => navigate("/user/book")} className="book-ride-btn">
-          Book a New Ride
-        </button>
-        <button onClick={() => navigate("/user/dashboard")} className="dashboard-btn">
-          Go to Dashboard
-        </button>
+      <div className="page-container">
+        <div className="card text-center">
+          <h2 className="heading-lg">{error}</h2>
+          <p className="text-secondary mb-lg">You don't have any active rides at the moment.</p>
+          <div className="flex gap-md justify-center">
+            <button onClick={() => navigate("/user/book")} className="btn btn-primary">
+              Book a New Ride
+            </button>
+            <button onClick={() => navigate("/user/dashboard")} className="btn btn-secondary">
+              Go to Dashboard
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="current-ride-container">
-      <header className="ride-header">
+    <div className="page-container">
+      <header className="header">
         <h1>Current Ride</h1>
-        <button onClick={() => navigate('/user/dashboard')} className="back-btn">
+        <button onClick={() => navigate('/user/dashboard')} className="btn btn-secondary">
           ← Dashboard
         </button>
       </header>
 
-      <div className="ride-content">
+      <div className="page-content">
         <div className="ride-status-card">
           <div className="status-indicator">
             <div className={`status-dot ${ride.status.toLowerCase()}`}></div>
@@ -215,10 +219,28 @@ function CurrentRide() {
               ) : (
                 <>
                   <div className="payment-methods">
-                    <button onClick={handlePayment} className="payment-method">💳 Card</button>
-                    <button onClick={handlePayment} className="payment-method">💰 Cash</button>
-                    <button onClick={handlePayment} className="payment-method">📱 UPI</button>
+                    <button 
+                      onClick={() => setSelectedPaymentMethod('CARD')} 
+                      className={`payment-method ${selectedPaymentMethod === 'CARD' ? 'selected' : ''}`}
+                    >
+                      💳 Card
+                    </button>
+                    <button 
+                      onClick={() => setSelectedPaymentMethod('CASH')} 
+                      className={`payment-method ${selectedPaymentMethod === 'CASH' ? 'selected' : ''}`}
+                    >
+                      💰 Cash
+                    </button>
+                    <button 
+                      onClick={() => setSelectedPaymentMethod('UPI')} 
+                      className={`payment-method ${selectedPaymentMethod === 'UPI' ? 'selected' : ''}`}
+                    >
+                      📱 UPI
+                    </button>
                   </div>
+                  <button onClick={handlePayment} className="confirm-payment">
+                    Confirm Payment (₹{ride.fare})
+                  </button>
                   <button onClick={() => setShowPayment(false)} className="cancel-payment">Cancel</button>
                 </>
               )}

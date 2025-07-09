@@ -125,7 +125,8 @@ export default function DriverDashboard() {
               position: 'relative', 
               display: 'inline-block', 
               width: '60px', 
-              height: '30px' 
+              height: '30px',
+              cursor: 'pointer'
             }}>
               <input 
                 type="checkbox" 
@@ -140,24 +141,32 @@ export default function DriverDashboard() {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                backgroundColor: isOnline ? 'var(--success)' : 'var(--bg-tertiary)',
+                backgroundColor: isOnline ? 'var(--success)' : '#ccc',
                 transition: 'var(--transition-normal)',
                 borderRadius: '30px',
-                ':before': {
+                border: '2px solid var(--bg-primary)',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+              }}>
+                <span style={{
                   position: 'absolute',
                   content: '',
                   height: '22px',
                   width: '22px',
                   left: isOnline ? '32px' : '4px',
-                  bottom: '4px',
+                  bottom: '2px',
                   backgroundColor: 'white',
                   transition: 'var(--transition-normal)',
-                  borderRadius: '50%'
-                }
-              }}></span>
+                  borderRadius: '50%',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                }}></span>
+              </span>
             </label>
-            <span className={`text-${isOnline ? 'success' : 'muted'}`} style={{ fontWeight: '600' }}>
-              {isOnline ? 'Online' : 'Offline'}
+            <span style={{ 
+              fontWeight: '600',
+              color: isOnline ? 'var(--success)' : 'var(--text-muted)',
+              fontSize: '1rem'
+            }}>
+              {isOnline ? '🟢 Online' : '🔴 Offline'}
             </span>
           </div>
           <button onClick={handleLogout} className="btn btn-danger">Logout</button>

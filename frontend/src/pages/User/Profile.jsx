@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../services/authService';
-import './Profile.css';
 
 export default function UserProfile() {
   const [user, setUser] = useState(null);
@@ -25,47 +24,68 @@ export default function UserProfile() {
     }
   };
 
-  if (loading) return <div className="loading">Loading profile...</div>;
-  if (error) return <div className="error">{error}</div>;
+  if (loading) return (
+    <div className="page-container">
+      <div className="loading">Loading profile...</div>
+    </div>
+  );
+  
+  if (error) return (
+    <div className="page-container">
+      <div className="message message-error">{error}</div>
+    </div>
+  );
 
   return (
-    <div className="profile-container">
-      <header className="profile-header">
+    <div className="page-container">
+      <header className="header">
         <h1>My Profile</h1>
-        <button onClick={() => navigate('/user/dashboard')} className="back-btn">
+        <button onClick={() => navigate('/user/dashboard')} className="btn btn-secondary">
           ← Dashboard
         </button>
       </header>
 
-      <div className="profile-content">
-        <div className="profile-card">
-          <div className="profile-avatar">
-            <div className="avatar-circle">
+      <div className="page-content">
+        <div className="card">
+          <div className="text-center mb-lg">
+            <div style={{
+              width: '80px',
+              height: '80px',
+              borderRadius: '50%',
+              background: 'var(--accent-primary)',
+              color: 'var(--text-dark)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '2rem',
+              fontWeight: 'bold',
+              margin: '0 auto'
+            }}>
               {user?.name?.charAt(0).toUpperCase()}
             </div>
           </div>
 
           <div className="profile-info">
-            <div className="profile-details">
-              <div className="detail-item">
-                <span className="label">Name:</span>
-                <span className="value">{user?.name}</span>
+            <div style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
+              <div className="flex justify-between">
+                <span className="text-secondary">Name:</span>
+                <span className="text-primary font-weight: 600">{user?.name}</span>
               </div>
-              <div className="detail-item">
-                <span className="label">Email:</span>
-                <span className="value">{user?.email}</span>
+              <div className="flex justify-between">
+                <span className="text-secondary">Email:</span>
+                <span className="text-primary font-weight: 600">{user?.email}</span>
               </div>
-              <div className="detail-item">
-                <span className="label">Phone:</span>
-                <span className="value">{user?.phone}</span>
+              <div className="flex justify-between">
+                <span className="text-secondary">Phone:</span>
+                <span className="text-primary font-weight: 600">{user?.phone}</span>
               </div>
-              <div className="detail-item">
-                <span className="label">Role:</span>
-                <span className="value">{user?.role}</span>
+              <div className="flex justify-between">
+                <span className="text-secondary">Role:</span>
+                <span className="text-accent font-weight: 600">{user?.role}</span>
               </div>
-              <div className="detail-item">
-                <span className="label">Member Since:</span>
-                <span className="value">{new Date(user?.createdAt || Date.now()).toLocaleDateString()}</span>
+              <div className="flex justify-between">
+                <span className="text-secondary">Member Since:</span>
+                <span className="text-primary font-weight: 600">{new Date(user?.createdAt || Date.now()).toLocaleDateString()}</span>
               </div>
             </div>
           </div>
