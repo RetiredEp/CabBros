@@ -1,0 +1,325 @@
+Got it — you want an **API Documentation for Frontend Developers**, that clearly lists:
+
+* ✅ **Endpoints**
+* 📝 **What data to send**
+* 📤 **What it returns**
+* 🔐 Whether it needs token (protected)
+* 📌 **When to use it** in your frontend flow
+
+Here you go:
+
+---
+
+# 📘 Cab Booking System – Frontend API Documentation
+
+Each request that needs authentication requires this header:
+
+```
+Authorization: Bearer <JWT_TOKEN>
+```
+
+---
+
+## 👤 USER AUTH & PROFILE
+
+### 1. Register User
+
+**POST** `/api/users/register`
+**Body:**
+
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "phone": "1234567890",
+  "password": "password"
+}
+```
+
+**Returns:** `"User registered successfully"`
+
+---
+
+### 2. Login User
+
+**POST** `/api/users/login`
+**Body:**
+
+```json
+{
+  "email": "john@example.com",
+  "password": "password"
+}
+```
+
+**Returns:**
+`<JWT_TOKEN>` (string)
+
+---
+
+### 3. Get Logged-In User Profile
+
+**GET** `/api/users/profile`
+**Header:** `Authorization`
+**Returns:**
+
+```json
+{
+  "userId": 1,
+  "name": "John Doe",
+  "email": "john@example.com",
+  "phone": "1234567890",
+  "role": "USER"
+}
+```
+
+---
+
+## 🚕 USER – RIDE FLOW
+
+### 4. Book Ride
+
+**POST** `/api/users/book`
+**Header:** Authorization
+**Body:**
+
+```json
+{
+  "pickupLocation": "City A",
+  "dropoffLocation": "City B",
+  "distance": 12.5,
+  "fare": 300
+}
+```
+
+**Returns:**
+
+```json
+{
+  "rideId": 21,
+  "status": "REQUESTED",
+  "fare": 300,
+  ...
+}
+```
+
+---
+
+### 5. Get Current Ride
+
+**GET** `/api/users/ride/current`
+**Returns:**
+`Ride` object with `ACCEPTED` or `IN_PROGRESS` status
+
+---
+
+### 6. Get Ride History
+
+**GET** `/api/users/ride/history`
+**Returns:**
+
+```json
+[
+  {
+    "rideId": 12,
+    "pickupLocation": "...",
+    "dropoffLocation": "...",
+    "fare": 300,
+    "status": "COMPLETED",
+    "driver": {
+      "name": "Raj Driver",
+      "email": "raj@cab.com",
+      "phone": "98765"
+    }
+  }
+]
+```
+
+---
+
+## 🚖 DRIVER AUTH & PROFILE
+
+### 7. Register Driver
+
+**POST** `/api/drivers/register`
+**Body:**
+
+```json
+{
+  "name": "Raj",
+  "email": "raj@cab.com",
+  "phone": "9876543210",
+  "password": "password",
+  "licenseNumber": "LIC123",
+  "vehicleDetails": "Swift - TS09AB1234"
+}
+```
+
+---
+
+### 8. Login Driver
+
+**POST** `/api/drivers/login`
+**Returns:**
+`<JWT_TOKEN>`
+
+---
+
+### 9. Get Driver Profile
+
+**GET** `/api/drivers/profile`
+
+---
+
+## 📲 DRIVER – RIDE MANAGEMENT
+
+### 10. Set Availability
+
+**POST** `/api/drivers/availability?available=true`
+(or `false` to go offline)
+
+---
+
+### 11. Get All Available Ride Requests
+
+**GET** `/api/drivers/rides/requests`
+**Returns:**
+
+```json
+[
+  {
+    "rideId": 10,
+    "pickupLocation": "...",
+    "dropoffLocation": "...",
+    "fare": 200
+  }
+]
+```
+
+---
+
+### 12. Accept Ride
+
+**POST** `/api/drivers/rides/accept?rideId=10`
+**Returns:** Ride object assigned to driver
+
+---
+
+### 13. Update Ride Status
+
+**POST** `/api/drivers/rides/status?status=IN_PROGRESS`
+→ or `COMPLETED`
+
+---
+
+### 14. Get Current Ride
+
+**GET** `/api/drivers/rides/current`
+
+---
+
+### 15. Get Ride History
+
+**GET** `/api/drivers/rides/history`
+
+---
+
+## 💳 PAYMENT
+
+### 16. Make Payment
+
+**POST** `/api/payment/pay`
+**Body:**
+
+```json
+{
+  "rideId": 21,
+  "amount": 300,
+  "method": "CASH"
+}
+```
+
+**Returns:** `Payment` object with timestamp
+
+---
+
+### 17. Get Payment Receipt
+
+**GET** `/api/payment/receipt/21`
+**Returns:**
+
+```json
+{
+  "paymentId": 7,
+  "ride": { ... },
+  "amount": 300,
+  "method": "CASH",
+  "status": "SUCCESS",
+  "timestamp": "2025-07-08 12:34:56"
+}
+```
+
+---
+
+## ⭐ RATING
+
+### 18. Submit Rating
+
+**POST** `/api/ratings/submit`
+**Body:**
+
+```json
+{
+  "rideId": 21,
+  "score": 5,
+  "comment": "Very polite and smooth ride"
+}
+```
+
+---
+
+### 19. Get Driver Ratings (for logged-in driver)
+
+**GET** `/api/ratings/driver/phone`
+**Returns:**
+List of `Rating` objects with comment and score
+
+---
+
+## 🛠️ Utility
+
+### 20. Get Ride by ID
+
+**GET** `/api/rides/{rideId}`
+Used internally for payment/rating or debugging
+
+---
+
+## 🔐 AUTH HEADERS NEEDED FOR:
+
+| Endpoint Starts With | Needs Auth Header?              |
+| -------------------- | ------------------------------- |
+| `/api/users/*`       | ✅ Yes                           |
+| `/api/drivers/*`     | ✅ Yes                           |
+| `/api/payment/*`     | ✅ Yes                           |
+| `/api/ratings/*`     | ✅ Yes                           |
+| `/api/rides/*`       | ❌ Except status update manually |
+
+---
+
+## ✅ Summary for Frontend Integration
+
+| Feature            | Main Endpoint(s)                               | Expected Flow                 |
+| ------------------ | ---------------------------------------------- | ----------------------------- |
+| Register/Login     | `/users/login`, `/drivers/login`               | Save JWT token                |
+| Book Ride          | `/users/book`                                  | Send pickup, drop, fare       |
+| Get Ride Requests  | `/drivers/rides/requests`                      | Polling from driver dashboard |
+| Accept Ride        | `/drivers/rides/accept`                        | Button to accept              |
+| Update Ride Status | `/drivers/rides/status`                        | Button to start/complete ride |
+| Make Payment       | `/payment/pay`                                 | Show after ride completion    |
+| Rate Driver        | `/ratings/submit`                              | Show after payment            |
+| Show History       | `/users/ride/history`, `/drivers/ride/history` | Table/card view of past rides |
+
+---
+
+Would you like me to turn this into a PDF or Postman collection next?

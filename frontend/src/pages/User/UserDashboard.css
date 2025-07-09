@@ -1,0 +1,151 @@
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px 0;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.dashboard-header h1 {
+  color: #333;
+  margin: 0;
+}
+
+.logout-btn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.logout-btn:hover {
+  background: #c0392b;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+}
+
+.error {
+  color: #e74c3c;
+}
+
+.current-ride-section, .no-ride-section {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  margin-bottom: 30px;
+}
+
+.current-ride-section h2, .no-ride-section h2 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.ride-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  border-left: 4px solid #3498db;
+}
+
+.ride-card p {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.driver-info {
+  background: white;
+  border-radius: 5px;
+  padding: 15px;
+  margin-top: 15px;
+  border: 1px solid #ddd;
+}
+
+.view-ride-btn, .book-ride-btn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  margin-top: 15px;
+  transition: background 0.3s;
+}
+
+.view-ride-btn:hover, .book-ride-btn:hover {
+  background: #2980b9;
+}
+
+.no-ride-section {
+  text-align: center;
+}
+
+.no-ride-section p {
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.dashboard-actions {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+}
+
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.action-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-align: center;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 10px;
+  }
+  
+  .dashboard-header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  .action-grid {
+    grid-template-columns: 1fr;
+  }
+}

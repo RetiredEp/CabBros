@@ -1,0 +1,200 @@
+Absolutely! Here's a comprehensive **understanding document** that connects everything — from **Entities → Repositories → Services → Controllers** — while explaining how **data flows**, what is **expected from the frontend**, and what **each layer does** in your cab booking system.
+
+---
+
+# 🧠 Cab Booking System: Understanding & Flow Document
+
+## 🎯 Overview
+
+A real-time cab booking platform with two user roles:
+
+* **User**: Books rides, pays, and rates the driver
+* **Driver**: Accepts ride requests, completes rides, and sees ratings
+
+---
+
+## 🧩 1. ENTITY LAYER (JPA Models)
+
+| Entity    | Purpose                                                                |
+| --------- | ---------------------------------------------------------------------- |
+| `User`    | Stores user info (name, email, phone, password, role)                  |
+| `Driver`  | Stores driver info (email, phone, vehicle, license, availability flag) |
+| `Ride`    | Stores ride details (pickup, dropoff, status, fare, distance, etc.)    |
+| `Payment` | Linked to `Ride`, stores amount, method, timestamp, status             |
+| `Rating`  | Linked to `Ride`, stores score and comment                             |
+
+**Enum types used:**
+
+* `Role`: `USER`, `DRIVER`
+* `RideStatus`: `REQUESTED`, `ACCEPTED`, `IN_PROGRESS`, `COMPLETED`
+* `PaymentMethod`: `CASH`, `CARD`, etc.
+
+---
+
+## 🧾 2. REPOSITORY LAYER
+
+| Repository          | Core Methods Used                                                              |
+| ------------------- | ------------------------------------------------------------------------------ |
+| `UserRepository`    | `findByEmail()`                                                                |
+| `DriverRepository`  | `findByEmail()`, `findByPhone()`, `findByAvailableTrue()`                      |
+| `RideRepository`    | `findUnassignedRideRequests()`, `findByUserUserId()`, `findByDriverDriverId()` |
+| `PaymentRepository` | `findByRideRideId()`                                                           |
+| `RatingRepository`  | `findByDriverId()`, `existsByRide()`                                           |
+
+These are injected into services for business logic.
+
+---
+
+## 🔧 3. SERVICE LAYER
+
+Services contain **core business logic** and connect controllers to data access layer.
+
+### A. `UserService`
+
+* `register()`, `login()`, `getProfile(token)`
+* `bookRide(token, rideRequest)`
+* `getCurrentRide(token)`, `getRideHistory(token)`
+
+→ Used in **UserController**
+→ Expects frontend to:
+
+* Register/login user
+* Send pickup, drop, distance, duration, fare in `Ride` object during booking
+* Use JWT token in `Authorization` header for requests
+
+---
+
+### B. `DriverService`
+
+* `register()`, `login()`, `getProfile(token)`
+* `updateAvailability(token, boolean)`
+* `getAvailableRideRequests()`
+* `acceptRide(token, rideId)`, `getCurrentRide(token)`
+* `updateRideStatus(token, status)`
+* `getRideHistory(token)`
+
+→ Used in **DriverController**
+→ Expects frontend to:
+
+* Toggle availability
+* Poll ride requests if available
+* Accept ride via ride ID
+* Update status (`IN_PROGRESS`, `COMPLETED`)
+
+---
+
+### C. `RideService`
+
+* `getRideById(rideId)`
+* `updateRideStatus(rideId, status)` — admin/debug
+  → Used in **RideController**
+
+---
+
+### D. `PaymentService`
+
+* `processPayment(PaymentRequest)`
+  → Expects: `rideId`, `amount`, `method`
+* `getReceipt(rideId)` → Used after ride payment
+  → Used in **PaymentController**
+
+---
+
+### E. `RatingService`
+
+* `submitRating(RatingRequest)`
+  → Expects: `rideId`, `score`, `comment`
+* `getRatings(driverId)` → Admin
+* `getRatingsForDriver(token)` → Driver dashboard
+  → Used in **RatingController**
+
+---
+
+## 🌐 4. CONTROLLER LAYER
+
+Handles HTTP requests/responses, calls appropriate service methods.
+
+| Controller          | Purpose                                                                                   |
+| ------------------- | ----------------------------------------------------------------------------------------- |
+| `UserController`    | Register, login, get profile, book ride, view ride history                                |
+| `DriverController`  | Register, login, toggle availability, accept/view rides, update status, view ride history |
+| `RideController`    | Get ride by ID, manually update ride status                                               |
+| `PaymentController` | Process ride payment, get receipt                                                         |
+| `RatingController`  | Submit and view ratings                                                                   |
+
+All endpoints expect `Authorization: Bearer <token>` for protected routes.
+
+---
+
+## 📥 DATA EXPECTED FROM FRONTEND
+
+### 🔐 Auth
+
+* Register/Login for user/driver returns **JWT**
+* JWT stored in frontend and sent as header in all further requests
+
+### 🚕 Ride Booking (User)
+
+* User sends:
+
+```json
+{
+  "pickupLocation": "A",
+  "dropoffLocation": "B",
+  "distance": 4.2,
+  "fare": 200
+}
+```
+
+→ This data is generated on the frontend using **Leaflet.js** and sent to `/api/users/book`
+
+### 📲 Driver Flow
+
+* Toggle availability (true/false)
+* View ride requests → `GET /api/drivers/rides/requests`
+* Accept ride → `POST /api/drivers/rides/accept?rideId=3`
+* Update status → `POST /api/drivers/rides/status?status=IN_PROGRESS` or `COMPLETED`
+
+### 💳 Payment
+
+* After ride completed, simulate payment via:
+
+```json
+{
+  "rideId": 3,
+  "amount": 200,
+  "method": "CASH"
+}
+```
+
+### ⭐ Rating
+
+* After payment, user submits:
+
+```json
+{
+  "rideId": 3,
+  "score": 5,
+  "comment": "Great ride!"
+}
+```
+
+---
+
+## 🔁 DATA FLOW SUMMARY
+
+```
+Frontend → Controller → Service → Repository → Entity → DB
+
+◉ User books ride
+◉ Available drivers get ride
+◉ First driver to accept gets assigned
+◉ Driver starts → completes ride
+◉ User pays → rates driver
+◉ All actions logged in DB
+◉ Ride/payment/rating history visible to both roles
+```
+
+---
+
+Would you like a **PDF version** of this understanding document or move on to designing the **frontend wireframes + flow** in React?

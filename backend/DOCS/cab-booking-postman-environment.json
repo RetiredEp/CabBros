@@ -1,0 +1,24 @@
+{
+  "id": "cab-booking-env",
+  "name": "Cab Booking Local",
+  "values": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api",
+      "enabled": true
+    },
+    {
+      "key": "user_token",
+      "value": "<JWT_USER_TOKEN>",
+      "enabled": true
+    },
+    {
+      "key": "driver_token",
+      "value": "<JWT_DRIVER_TOKEN>",
+      "enabled": true
+    }
+  ],
+  "_postman_variable_scope": "environment",
+  "_postman_exported_at": "2025-07-08T13:52:33.271898Z",
+  "_postman_exported_using": "ChatGPT Postman Generator"
+}

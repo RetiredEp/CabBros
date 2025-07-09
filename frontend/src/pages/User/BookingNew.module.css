@@ -1,0 +1,270 @@
+.bookingContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.header h2 {
+  color: #2c3e50;
+  margin: 0;
+}
+
+.backBtn {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.backBtn:hover {
+  background: #5a6268;
+}
+
+.formSection {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.inputGroup {
+  margin-bottom: 25px;
+}
+
+.inputGroup label {
+  display: block;
+  margin-bottom: 8px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.inputWithButton {
+  display: flex;
+  gap: 10px;
+}
+
+.locationInput {
+  flex: 1;
+  padding: 12px 15px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.locationInput:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.setLocationBtn {
+  background: #17a2b8;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s;
+  white-space: nowrap;
+}
+
+.setLocationBtn:hover:not(:disabled) {
+  background: #138496;
+}
+
+.setLocationBtn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+.calculateBtn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.calculateBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.calculateBtn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.rideDetails {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 25px;
+  border-left: 4px solid #28a745;
+}
+
+.detailItem {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.detailItem:last-child {
+  margin-bottom: 0;
+  font-weight: 600;
+  font-size: 18px;
+  color: #28a745;
+}
+
+.bookBtn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 18px 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.bookBtn:hover:not(:disabled) {
+  background: #218838;
+  transform: translateY(-2px);
+}
+
+.bookBtn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.searchingIndicator {
+  text-align: center;
+  padding: 20px;
+  background: #e3f2fd;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.rideConfirmation {
+  background: #d4edda;
+  border: 2px solid #c3e6cb;
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.rideConfirmation h3 {
+  color: #155724;
+  margin-bottom: 20px;
+}
+
+.rideInfo {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.rideInfo p {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.viewRideBtn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.viewRideBtn:hover {
+  background: #0056b3;
+}
+
+.statusMessage {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  color: #856404;
+  text-align: center;
+}
+
+.mapSection {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .bookingContainer {
+    padding: 10px;
+  }
+  
+  .header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .inputWithButton {
+    flex-direction: column;
+  }
+  
+  .formSection {
+    padding: 20px;
+  }
+}

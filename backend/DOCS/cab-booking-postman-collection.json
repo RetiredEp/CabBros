@@ -1,0 +1,149 @@
+{
+  "info": {
+    "_postman_id": "cab-booking-collection",
+    "name": "Cab Booking System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John\",\n  \"email\": \"john@example.com\",\n  \"phone\": \"1234567890\",\n  \"password\": \"password\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/users/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"password\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {$user_token}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "profile"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Driver",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/drivers/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "drivers",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Driver Raj\",\n  \"email\": \"raj@example.com\",\n  \"phone\": \"9876543210\",\n  \"password\": \"password\",\n  \"licenseNumber\": \"LIC123\",\n  \"vehicleDetails\": \"Swift - TS09AB1234\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/drivers/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "drivers",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"raj@example.com\",\n  \"password\": \"password\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {$driver_token}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/drivers/profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "drivers",
+                "profile"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
