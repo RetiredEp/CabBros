@@ -1,12 +1,12 @@
-# Cab Booking System
+# CabBros - Cab Booking System
 
-A comprehensive full-stack cab booking application built with Spring Boot backend and React frontend.
+A surprisingly functional full-stack cab booking application built by some bros who know Spring Boot and React.
 
 ## 🚀 Project Overview
 
-This is a complete cab booking system that allows users to book rides and drivers to accept and manage ride requests. The system includes real-time updates, payment processing, and rating functionality.
+This is our take on a cab booking system. It actually works! Users can book rides, drivers can accept them, and we even built a payment selection UI (though we won't charge your card). It's got authentication, state management, and everything you'd expect from a demo project that went a bit too far.
 
-## 📋 Features
+## 📋 What We Actually Built
 
 ### User Features
 - **User Registration & Authentication**: Secure user registration and login

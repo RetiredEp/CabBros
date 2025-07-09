@@ -36,7 +36,7 @@ export default function Home() {
   return (
     <div className="page-container">
       <header className="header">
-        <h1>🚕 CabBooking</h1>
+        <h1>🚕 CabBros</h1>
         <div className="header-actions">
           {isAuthenticated ? (
             <>
@@ -65,11 +65,12 @@ export default function Home() {
         <div className="card">
           <div className="text-center">
             <h1 className="heading-xl">
-              Your Ride, <span className="text-accent">Just a Tap Away</span>
+              Your Ride, <span className="text-accent">Bros Style</span>
             </h1>
             <p className="text-secondary mb-lg" style={{ fontSize: '1.1rem', lineHeight: '1.6' }}>
-              Experience safe, reliable, and affordable rides with our modern cab booking platform. 
-              Whether you're a passenger or a driver, we've got you covered.
+              We're just a couple of bros who built a cab app. It actually works (most of the time), 
+              has real login forms, and drivers can even toggle their availability! 
+              No fancy AI or rocket science - just good old-fashioned ride booking.
             </p>
             <div className="flex gap-md justify-center">
               <button onClick={handleGetStarted} className="btn btn-primary btn-lg">
@@ -85,33 +86,33 @@ export default function Home() {
         </div>
 
         <div className="card">
-          <h2 className="heading-lg text-center">Why Choose Us?</h2>
+          <h2 className="heading-lg text-center">What We Actually Built</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 'var(--spacing-lg)' }}>
             <div className="text-center">
-              <div style={{ fontSize: '2rem', marginBottom: 'var(--spacing-md)' }}>🛡️</div>
-              <h3 className="heading-sm">Safe & Secure</h3>
-              <p className="text-secondary">Verified drivers and secure payment options ensure your safety and peace of mind.</p>
+              <div style={{ fontSize: '2rem', marginBottom: 'var(--spacing-md)' }}>�</div>
+              <h3 className="heading-sm">Login That Works</h3>
+              <p className="text-secondary">Yes, you can actually log in and out! We even validate your email format. Revolutionary stuff.</p>
             </div>
             <div className="text-center">
-              <div style={{ fontSize: '2rem', marginBottom: 'var(--spacing-md)' }}>⚡</div>
-              <h3 className="heading-sm">Quick Rides</h3>
-              <p className="text-secondary">Find nearby drivers instantly and get to your destination without delays.</p>
+              <div style={{ fontSize: '2rem', marginBottom: 'var(--spacing-md)' }}>🚗</div>
+              <h3 className="heading-sm">Real Ride Booking</h3>
+              <p className="text-secondary">Book rides, see them in your history, and watch the status change. It's like magic, but it's just React state.</p>
             </div>
             <div className="text-center">
-              <div style={{ fontSize: '2rem', marginBottom: 'var(--spacing-md)' }}>💳</div>
-              <h3 className="heading-sm">Easy Payments</h3>
-              <p className="text-secondary">Multiple payment options including cash, card, and digital wallets.</p>
+              <div style={{ fontSize: '2rem', marginBottom: 'var(--spacing-md)' }}>�</div>
+              <h3 className="heading-sm">Driver Availability Toggle</h3>
+              <p className="text-secondary">Drivers can go online/offline with our super high-tech toggle button. It even changes colors!</p>
             </div>
             <div className="text-center">
-              <div style={{ fontSize: '2rem', marginBottom: 'var(--spacing-md)' }}>📱</div>
-              <h3 className="heading-sm">User Friendly</h3>
-              <p className="text-secondary">Intuitive interface that makes booking rides effortless for everyone.</p>
+              <div style={{ fontSize: '2rem', marginBottom: 'var(--spacing-md)' }}>�</div>
+              <h3 className="heading-sm">Payment Method Selection</h3>
+              <p className="text-secondary">Choose between Cash, UPI, or Card. We won't actually charge you, but the UI looks convincing.</p>
             </div>
           </div>
         </div>
 
         <div className="card">
-          <h2 className="heading-lg text-center">How It Works</h2>
+          <h2 className="heading-lg text-center">How To Use This Thing</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-xl)', textAlign: 'center' }}>
             <div>
               <div style={{ 
@@ -127,8 +128,8 @@ export default function Home() {
                 fontSize: '1.5rem', 
                 fontWeight: 'bold' 
               }}>1</div>
-              <h3 className="heading-sm">Set Your Location</h3>
-              <p className="text-secondary">Enter your pickup and drop-off locations</p>
+              <h3 className="heading-sm">Sign Up</h3>
+              <p className="text-secondary">Create an account. We'll ask for your email and won't spam you (probably).</p>
             </div>
             <div>
               <div style={{ 
@@ -144,8 +145,8 @@ export default function Home() {
                 fontSize: '1.5rem', 
                 fontWeight: 'bold' 
               }}>2</div>
-              <h3 className="heading-sm">Choose Your Ride</h3>
-              <p className="text-secondary">Select from available drivers and confirm your booking</p>
+              <h3 className="heading-sm">Book a Ride</h3>
+              <p className="text-secondary">Type where you're going. Our algorithm will find you a driver (if any are online).</p>
             </div>
             <div>
               <div style={{ 
@@ -161,8 +162,8 @@ export default function Home() {
                 fontSize: '1.5rem', 
                 fontWeight: 'bold' 
               }}>3</div>
-              <h3 className="heading-sm">Enjoy Your Trip</h3>
-              <p className="text-secondary">Sit back and enjoy a comfortable ride to your destination</p>
+              <h3 className="heading-sm">Pretend to Pay</h3>
+              <p className="text-secondary">Select your payment method and feel good about this working demo.</p>
             </div>
           </div>
         </div>
@@ -170,9 +171,9 @@ export default function Home() {
 
       <footer className="card">
         <div className="text-center">
-          <h3 className="text-accent mb-md">🚕 CabBooking</h3>
-          <p className="text-secondary mb-lg">Making transportation simple and reliable for everyone.</p>
-          <p className="text-muted">&copy; 2025 CabBooking System. Built with React & Spring Boot.</p>
+          <h3 className="text-accent mb-md">🚕 CabBros</h3>
+          <p className="text-secondary mb-lg">Making cab apps one React component at a time.</p>
+          <p className="text-muted">&copy; 2025 CabBros. Built by bros, for bros (and everyone else).</p>
         </div>
       </footer>
     </div>

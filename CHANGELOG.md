@@ -1,6 +1,19 @@
 # Changelog
 
-All notable changes to the Cab Booking System project will be documented in this file.
+All notable changes to the CabBros project will be documented in this file.
+
+## [1.4.0] - 2025-07-09
+
+### Changed
+- **Rebranded to CabBros**: Updated app name from "Cab Booking System" to "CabBros"
+- **Homepage Personality**: Added humor and honesty to homepage descriptions
+- **Title Updates**: Updated HTML title and package.json name
+- **Footer Branding**: Updated footer text to match new fun personality
+
+### Fun Updates
+- **Homepage Copy**: Replaced corporate speak with funny but truthful descriptions
+- **Feature Descriptions**: Honestly described what the app actually does
+- **Brand Voice**: Established a more casual, "bro-friendly" tone
 
 ## [1.3.0] - 2025-07-09
 
