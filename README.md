@@ -6,6 +6,31 @@ A surprisingly functional full-stack cab booking application built by some bros 
 
 This is our take on a cab booking system. It actually works! Users can book rides, drivers can accept them, and we even built a payment selection UI (though we won't charge your card). It's got authentication, state management, and everything you'd expect from a demo project that went a bit too far.
 
+## 🏗️ Architecture Overview
+
+### System Design
+- **Microservice-ready**: Clear separation between frontend and backend
+- **RESTful API**: Stateless communication between client and server
+- **JWT Authentication**: Token-based auth for scalability
+- **Role-based Access**: User, Driver, and Admin roles with different permissions
+- **Real-time Updates**: Polling-based status updates (ready for WebSocket upgrade)
+
+### How It's Built
+
+**Backend (Spring Boot):**
+- **Controller Layer**: Handles HTTP requests and responses
+- **Service Layer**: Contains business logic and orchestrates operations
+- **Repository Layer**: Data access using Spring Data JPA
+- **Security Layer**: JWT-based authentication with role-based authorization
+- **Configuration**: Centralized config for CORS, security, and database
+
+**Frontend (React):**
+- **Component Architecture**: Reusable components with single responsibility
+- **Service Layer**: Axios-based API clients with interceptors
+- **Route Protection**: Private routes based on authentication state
+- **State Management**: React hooks for local state, context for global auth
+- **Responsive Design**: CSS Grid and Flexbox with custom CSS variables
+
 ## 📋 What We Actually Built
 
 ### User Features
@@ -28,6 +53,143 @@ This is our take on a cab booking system. It actually works! Users can book ride
 - **User Management**: View and manage users and drivers
 - **Ride Monitoring**: Monitor all rides in real-time
 - **Analytics**: View system statistics and reports
+
+## 🛠️ How to Build & Understand This Project
+
+### 1. Backend Deep Dive (Spring Boot)
+
+**Core Dependencies:**
+```xml
+<!-- Key dependencies in pom.xml -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt</artifactId>
+</dependency>
+```
+
+**Build Process:**
+```bash
+cd backend
+
+# Clean and compile
+./mvnw clean compile
+
+# Run tests
+./mvnw test
+
+# Package to JAR
+./mvnw clean package
+
+# Run the application
+./mvnw spring-boot:run
+```
+
+**Key Architecture Components:**
+
+1. **Security Configuration** (`SecurityConfig.java`):
+   - JWT token validation
+   - Role-based endpoint protection
+   - CORS configuration for React frontend
+
+2. **Entity Relationships**:
+   - User ↔ Ride (One-to-Many)
+   - Driver ↔ Ride (One-to-Many)
+   - Ride ↔ Payment (One-to-One)
+   - Ride ↔ Rating (One-to-One)
+
+3. **Service Layer Pattern**:
+   - `UserService` - User management and authentication
+   - `RideService` - Ride booking and status management
+   - `DriverService` - Driver operations and availability
+
+### 2. Frontend Deep Dive (React + Vite)
+
+**Build Configuration:**
+```javascript
+// vite.config.js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 5173,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8081',
+        changeOrigin: true
+      }
+    }
+  }
+})
+```
+
+**Build Process:**
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Development server with hot reload
+npm run dev
+
+# Type checking and linting
+npm run lint
+
+# Production build
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+**Key Frontend Architecture:**
+
+1. **Service Layer** (`src/services/`):
+   - `authService.js` - JWT token management, login/logout
+   - `rideService.js` - Ride operations API calls
+   - `userService.js` - User profile management
+   - Response interceptors for token expiration handling
+
+2. **Component Structure**:
+   - **Pages**: Full page components with routing
+   - **Components**: Reusable UI components
+   - **Protected Routes**: Auth-based route protection
+
+3. **Styling System**:
+   - CSS Variables for theming (`globals.css`)
+   - Responsive grid layouts
+   - Unified component classes
+
+### 3. Database Design
+
+**Entity Schema:**
+```sql
+-- Core entities and relationships
+User (id, name, email, phone, password_hash, role)
+Driver (id, user_id, license_number, vehicle_info, availability)
+Ride (id, user_id, driver_id, pickup, dropoff, status, fare, created_at)
+Payment (id, ride_id, amount, method, status)
+Rating (id, ride_id, user_rating, driver_rating, comments)
+```
+
+**Development Database:**
+- H2 in-memory database for quick development
+- Auto-creates tables from JPA entities
+- Console available at `/h2-console`
 
 ## 🛠️ Technology Stack
 
@@ -192,12 +354,158 @@ For complete API documentation, see `/backend/DOCS/api_endpoints_examples.md`
 ### Backend Testing
 ```bash
 cd backend
+
+# Run all tests
 ./mvnw test
+
+# Run specific test class
+./mvnw test -Dtest=UserServiceTest
+
+# Generate test coverage report
+./mvnw test jacoco:report
 ```
 
 ### Frontend Testing
 ```bash
 cd frontend
+
+# Run tests (when configured)
+npm run test
+
+# Lint check
+npm run lint
+
+# Build verification
+npm run build
+```
+
+## 🔧 Development Workflow
+
+### Adding New Features
+
+1. **Backend API Endpoint:**
+   ```java
+   // 1. Create/update Entity (src/main/java/.../entity/)
+   @Entity
+   public class NewFeature {
+       // JPA annotations and fields
+   }
+   
+   // 2. Create Repository (src/main/java/.../repository/)
+   public interface NewFeatureRepository extends JpaRepository<NewFeature, Long> {}
+   
+   // 3. Create Service (src/main/java/.../service/)
+   @Service
+   public class NewFeatureService {
+       // Business logic
+   }
+   
+   // 4. Create Controller (src/main/java/.../controller/)
+   @RestController
+   @RequestMapping("/api/new-feature")
+   public class NewFeatureController {
+       // REST endpoints
+   }
+   ```
+
+2. **Frontend Integration:**
+   ```javascript
+   // 1. Add service function (src/services/)
+   export const newFeatureService = {
+     async getAll() {
+       const response = await api.get('/new-feature');
+       return response.data;
+     }
+   };
+   
+   // 2. Create/update component (src/pages/ or src/components/)
+   export default function NewFeaturePage() {
+     // React component logic
+   }
+   
+   // 3. Add route (src/routes/AppRouter.jsx)
+   <Route path="/new-feature" element={<NewFeaturePage />} />
+   ```
+
+### Common Development Tasks
+
+**Hot Reload Setup:**
+```bash
+# Terminal 1: Backend with auto-restart
+cd backend && ./mvnw spring-boot:run
+
+# Terminal 2: Frontend with hot module replacement
+cd frontend && npm run dev
+```
+
+**Database Changes:**
+```bash
+# Check H2 console: http://localhost:8081/h2-console
+# JDBC URL: jdbc:h2:mem:testdb
+# Username: sa, Password: (empty)
+```
+
+**API Testing:**
+```bash
+# Use provided Postman collection
+# Import: backend/DOCS/cab-booking-postman-collection.json
+# Environment: backend/DOCS/cab-booking-postman-environment.json
+```
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **Backend won't start:**
+   ```bash
+   # Check Java version
+   java -version  # Should be 17+
+   
+   # Check port availability
+   netstat -an | grep 8081
+   
+   # Clean and rebuild
+   ./mvnw clean install
+   ```
+
+2. **Frontend build fails:**
+   ```bash
+   # Clear node_modules and reinstall
+   rm -rf node_modules package-lock.json
+   npm install
+   
+   # Check Node version
+   node -v  # Should be 16+
+   ```
+
+3. **CORS Issues:**
+   - Backend CORS is configured for `http://localhost:5173`
+   - Frontend proxy is configured for `/api` routes
+   - Check `SecurityConfig.java` for CORS settings
+
+4. **Authentication Issues:**
+   - JWT tokens expire after configured time
+   - Check browser localStorage for token
+   - Interceptor handles token refresh automatically
+
+### Debugging Tips
+
+**Backend Debugging:**
+```bash
+# Enable debug logging in application.properties
+logging.level.com.cabbookingsystem=DEBUG
+logging.level.org.springframework.security=DEBUG
+
+# Run with debugger
+./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
+```
+
+**Frontend Debugging:**
+```javascript
+// Check API calls in browser dev tools
+// Add console.logs in service functions
+// Use React DevTools browser extension
+```
 npm run test
 ```
 
@@ -276,10 +584,64 @@ For support and questions:
 
 ## 🔄 Version History
 
+- **v1.4.0** (Current) - Rebranded to CabBros with humorous but honest copy
+- **v1.3.0** - Enhanced error handling, token management, and UI consistency  
+- **v1.2.0** - Payment method selection, driver availability improvements
+- **v1.1.0** - Global theming system, standardized UI components
 - **v1.0.0** - Initial release with core functionality
-- **v1.1.0** - Added real-time updates and enhanced UI
-- **v1.2.0** - Payment integration and rating system
-- **v1.3.0** - Mobile responsiveness and PWA features
+
+## 🚀 Production Deployment
+
+### Docker Support (Optional)
+
+**Backend Dockerfile:**
+```dockerfile
+FROM openjdk:17-jdk-slim
+COPY target/cab-booking-system-1.0.jar app.jar
+EXPOSE 8081
+ENTRYPOINT ["java", "-jar", "/app.jar"]
+```
+
+**Frontend Dockerfile:**
+```dockerfile
+FROM node:18-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+```
+
+### Environment Setup
+
+**Production application.properties:**
+```properties
+# Database
+spring.datasource.url=jdbc:mysql://localhost:3306/cabros_prod
+spring.datasource.username=${DB_USER}
+spring.datasource.password=${DB_PASSWORD}
+
+# JPA
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.show-sql=false
+
+# Security
+jwt.secret=${JWT_SECRET_PROD}
+jwt.expiration=86400000
+
+# Logging
+logging.level.root=INFO
+logging.file.name=logs/cabros.log
+```
+
+**Production .env (Frontend):**
+```env
+VITE_API_BASE_URL=https://api.cabros.com/api
+VITE_ENVIRONMENT=production
+```
 
 ## 🎯 Roadmap
 

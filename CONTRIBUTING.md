@@ -1,14 +1,15 @@
-# Contributing to Cab Booking System
+# Contributing to CabBros
 
-Thank you for your interest in contributing to the Cab Booking System! This document provides guidelines and information for contributors.
+Thank you for your interest in contributing to CabBros! This document provides guidelines and information for contributors who want to help make our cab booking system even more awesome.
 
 ## 🤝 Code of Conduct
 
-By participating in this project, you agree to abide by our Code of Conduct:
-- Be respectful and inclusive
-- Provide constructive feedback
+By participating in this project, you agree to abide by our Bro Code:
+- Be respectful and inclusive (bros support bros)
+- Provide constructive feedback 
 - Focus on what is best for the community
 - Show empathy towards other community members
+- Keep the humor but maintain professionalism in code
 
 ## 🚀 Getting Started
 
